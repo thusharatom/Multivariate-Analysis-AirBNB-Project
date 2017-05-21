@@ -1,0 +1,1728 @@
+
+
+/*AUSTRALIA*/
+/*PROFILING*/
+data temp_1_au;
+	set airbnb3;
+
+	if country_destination='AU';
+	group=1;
+
+	if age_new='18-25' then
+	age_18_25=1;
+	else age_18_25=0;
+
+	if age_new='26-35' then
+	age_26_35=1;
+	else age_26_35=0;
+
+	if age_new='36-45' then
+	age_36_45=1;
+	else age_36_45=0;
+
+	if age_new='46-55' then
+	age_46_55=1;
+	else age_46_55=0;
+
+	if age_new='56-65' then
+	age_56_65=1;
+	else age_56_65=0;
+
+	if age_new='66+' then
+	age_66_above=1;
+	else age_66_above=0;
+
+	if age_new='Unknown' then
+	age_unknown=1;
+	else age_unknown=0;
+
+	if gender='MALE' then
+	gender_male=1;
+	else gender_male=0;
+
+	if gender='FEMALE' then
+	gender_female=1;
+	else gender_female=0;
+
+	if gender='Unknown' then
+	gender_Unknown=1;
+	else gender_Unknown=0;
+
+	if signup_method='basic' then
+	signup_method_basic=1;
+	else signup_method_basic=0;
+
+	if signup_method='facebook' then
+	signup_method_facebook=1;
+	else signup_method_facebook=0;
+
+	if signup_method='google' then
+	signup_method_google=1;
+	else signup_method_google=0;
+
+	if signup_flow=0 then
+	signup_flow_0=1;
+	else signup_flow_0=0;
+
+	if signup_flow=1 then
+	signup_flow_1=1;
+	else signup_flow_1=0;
+
+	if signup_flow=2 then
+	signup_flow_2=1;
+	else signup_flow_2=0;
+
+	if signup_flow=3 then
+	signup_flow_3=1;
+	else signup_flow_3=0;
+
+	if signup_flow=12 then
+	signup_flow_12=1;
+	else signup_flow_12=0;
+
+	if signup_flow=23 then
+	signup_flow_23=1;
+	else signup_flow_23=0;
+
+	if signup_flow=24 then
+	signup_flow_24=1;
+	else signup_flow_24=0;
+
+	if signup_flow=25 then
+	signup_flow_25=1;
+	else signup_flow_25=0;
+
+	if signup_flow not in (1,2,3,12,23,24,25) then
+	signup_flow_others=1;
+	else signup_flow_others=0;
+
+	if affiliate_channel='api' then
+	aff_channel_api=1;
+	else aff_channel_api=0;
+
+	if affiliate_channel='content' then
+	aff_channel_content=1;
+	else aff_channel_content=0;
+
+	if aff_channel='direct' then
+	aff_channel_direct=1;
+	else aff_channel_direct=0;
+
+	if affiliate_channel='other' then
+	aff_channel_other=1;
+	else aff_channel_other=0;
+
+	if affliate_channel='remarketing' then
+	aff_channel_remarketing=1;
+	else aff_channel_remarketing=0;
+
+	if affiliate_channel='sem-brand' then
+	aff_channel_sem_brand=1;
+	else aff_channel_sem_brand=0;
+
+	if affiliate_channel='sem-non-brand' then
+	aff_channel_sem_non_brand=1;
+	else aff_channel_sem_non_brand=0;
+
+	if affiliate_channel='seo' then
+	aff_channel_seo=1;
+	else aff_channel_seo=0;
+
+	if affiliate_provider='bing' then
+	aff_provider_bing=1;
+	else aff_provider_bing=0;
+
+	if affiliate_provider='craigslist' then
+	aff_provider_craigslist=1;
+	else aff_provider_craigslist=0;
+
+	if affiliate_provider='direct' then
+	aff_provider_direct=1;
+	else aff_provider_direct=0;
+
+	if affiliate_provider='facebook' then
+	aff_provider_facebook=1;
+	else aff_provider_facebook=0;
+
+	if affiliate_provider='google' then
+	aff_provider_google=1;
+	else aff_provider_google=0;
+
+	if affiliate_provider='other' then
+	aff_provider_other=1;
+	else aff_provider_other=0;
+
+	if first_affiliate_tracked='linked' then
+	first_aff_tra_linked=1;
+	else first_aff_tra_linked=0;
+
+	if first_affiliate_tracked='omg' then
+	first_aff_tra_omg=1;
+	else first_aff_tra_omg=0;
+
+	if first_affiliate_tracked='product' then
+	first_aff_tra_product=1;
+	else first_aff_tra_product=0;
+
+	if first_affiliate_tracked in ('tracked-other','Other') then
+	first_aff_tra_other=1;
+	else first_aff_tra_other=0;
+
+	if first_affiliate_tracked='untracked' then
+	first_aff_tra_untracked=1;
+	else first_aff_tra_untracked=0;
+
+	if signup_app='Android' then
+	signup_app_android=1;
+	else signup_app_android=0;
+
+	if signup_app='Moweb' then
+	signup_app_moweb=1;
+	else signup_app_moweb=0;
+
+	if signup_app='Web' then
+	signup_app_web=1;
+	else signup_app_web=0;
+
+	if signup_app='iOS' then
+	signup_app_iOS=1;
+	else signup_app_iOS=0;
+
+	if first_device_type='Android Phone' then
+	first_dev_type_andr_phone=1;
+	else first_dev_type_andr_phone=0;
+
+	if first_device_type='Android Tablet' then
+	first_dev_type_andr_tab=1;
+	else first_dev_type_andr_tab=0;
+
+	if first_device_type='Desktop (Other)' then
+	first_dev_type_desk_other=1;
+	else first_dev_type_desk_other=0;
+
+	if first_device_type='Mac Desktop' then
+	first_dev_type_mac_desk=1;
+	else first_dev_type_mac_desk=0;
+
+	if first_device_type in ('Other/Unknown','SmartPhone (Other)') then
+	first_dev_type_other=1;
+	else first_dev_type_other=0;
+
+	if first_device_type='Windows Desktop' then
+	first_dev_type_win_desk=1;
+	else first_dev_type_win_desk=0;
+
+	if first_device_type='iPad' then
+	first_dev_type_iPad=1;
+	else first_dev_type_iPad=0;
+
+	if first_device_type='iPhone' then
+	first_dev_type_iPhone=1;
+	else first_dev_type_iPhone=0;
+
+	if first_browser='Chrome' then
+	first_browser_Chrome=1;
+	else first_browser_Chrome=0;
+
+	if first_browser='Firefox' then
+	first_browser_Firefox=1;
+	else first_browser_Firefox=0;
+
+	if first_browser='IE' then
+	first_browser_IE=1;
+	else first_browser_IE=0;
+
+	if first_browser='Mobile Safari' then
+	first_browser_Mob_Safari=1;
+	else first_browser_Mob_Safari=0;
+
+	if first_browser='Safari' then
+	first_browser_Safari=1;
+	else first_browser_Safari=0;
+
+	if first_browser='Others' then
+	first_browser_Others=1;
+	else first_browser_Others=0;
+
+	if language_new='eng' then
+	language_eng=1;
+	else language_eng=0;
+
+	if language_new='fra' then
+	language_fra=1;
+	else language_fra=0;
+
+	if language_new='ita' then
+	language_ita=1;
+	else language_ita=0;
+
+	if language_new='nld' then
+	language_nld=1;
+	else language_nld=0;
+
+	if language_new='por' then
+	language_por=1;
+	else language_por=0;
+
+	if language_new='spa' then
+	language_spa=1;
+	else language_spa=0;
+
+	if language_new='Others' then
+	language_others=1;
+	else language_others=0;
+
+	if Primary in ("Android App Unknown Phone/Tablet","Android Phone") then
+	prim_dev_andr=1;
+	else prim_dev_andr=0;
+
+	if Primary in ("Mac Desktop") then
+	prim_dev_mac_desk=1;
+	else prim_dev_mac_desk=0;
+
+	if Primary in ("Windows Desktop","Windows Phone") then
+	prim_dev_win_desk=1;
+	else prim_dev_win_desk=0;
+
+	if Primary in ("iPhone") then
+	prim_dev_iphone=1;
+	else prim_dev_iphone=0;
+
+	if Primary in ("iPad Tablet","iPodtouch") then
+	prim_dev_ipad=1;
+	else prim_dev_ipad=0;
+
+	if Primary in ("Unknown") then
+	prim_dev_unknown=1;
+	else prim_dev_unknown=0;
+
+	if Primary in ("Blackberry","Chromebook","Linux Desktop","Tablet") then
+	prim_dev_others=1;
+	else prim_dev_others=0;
+
+	if month_account_created=1 then
+	month_1=1;
+	else month_1=0;
+
+	if month_account_created=2 then
+	month_2=1;
+	else month_2=0;
+
+	if month_account_created=3 then
+	month_3=1;
+	else month_3=0;
+
+	if month_account_created=4 then
+	month_4=1;
+	else month_4=0;
+
+	if month_account_created=5 then
+	month_5=1;
+	else month_5=0;
+
+	if month_account_created=6 then
+	month_6=1;
+	else month_6=0;
+
+	if month_account_created=7 then
+	month_7=1;
+	else month_7=0;
+
+	if month_account_created=8 then
+	month_8=1;
+	else month_8=0;
+
+	if month_account_created=9 then
+	month_9=1;
+	else month_9=0;
+
+	if month_account_created=10 then
+	month_10=1;
+	else month_10=0;
+
+	if month_account_created=11 then
+	month_11=1;
+	else month_11=0;
+
+	if month_account_created=12 then
+	month_12=1;
+	else month_12=0;
+	keep
+	group 
+
+	age_18_25
+	age_26_35
+	age_36_45
+	age_46_55
+	age_56_65
+	age_66_above
+	age_Unknown
+
+	gender_male
+	gender_female
+	gender_Unknown
+
+	signup_method_basic
+	signup_method_facebook
+	signup_method_google
+
+	signup_flow_0
+	signup_flow_1
+	signup_flow_2
+	signup_flow_3 
+	signup_flow_12
+	signup_flow_23
+	signup_flow_24
+	signup_flow_25
+	signup_flow_others
+
+	aff_channel_api
+	aff_channel_content
+	aff_channel_direct
+	aff_channel_other 
+	aff_channel_remarketing	
+	aff_channel_sem_brand
+	aff_channel_sem_non_brand
+	aff_channel_seo
+
+	aff_provider_bing
+	aff_provider_craigslist 
+	aff_provider_direct
+	aff_provider_facebook
+	aff_provider_google
+	aff_provider_other
+
+	first_aff_tra_linked
+	first_aff_tra_omg
+	first_aff_tra_product
+	first_aff_tra_other
+	first_aff_tra_untracked
+
+	signup_app_android
+	signup_app_moweb
+	signup_app_web
+	signup_app_iOS
+
+	first_dev_type_andr_phone
+	first_dev_type_andr_tab
+	first_dev_type_desk_other
+	first_dev_type_mac_desk
+	first_dev_type_other
+	first_dev_type_win_desk
+	first_dev_type_iPad
+	first_dev_type_iPhone 
+
+	first_browser_Chrome
+	first_browser_Firefox
+	first_browser_IE
+	first_browser_Mob_Safari
+	first_browser_Safari
+	first_browser_Others
+
+	language_eng
+	language_fra
+	language_ita
+	language_nld
+	language_por
+	language_spa
+	language_others
+
+	prim_dev_andr
+	prim_dev_mac_desk
+	prim_dev_win_desk
+	prim_dev_iphone
+	prim_dev_ipad
+	prim_dev_unknown
+	prim_dev_others
+
+	month_1
+	month_2
+	month_3 
+	month_4
+	month_5 
+	month_6 
+	month_7
+	month_8
+	month_9
+	month_10
+	month_11 
+	month_12
+
+	trips_action
+	viewsearch_action
+	wishlist_action
+	reviews_action
+	booking_action
+	hostrelated_action
+	profile_action
+	cancellation_action
+	coupon_action
+	messagetohost_action
+	;
+	label
+	age_18_25='age_18_25'
+	age_26_35='age_26_35'
+	age_36_45='age_36_45'
+	age_46_55='age_46_55'
+	age_56_65='age_56_65'
+	age_66_above='age_66_above'
+	age_Unknown='age_Unknown'
+
+	gender_male='gender_male'
+	gender_female='gender_female'
+	gender_Unknown='gender_Unknown'
+
+	signup_method_basic='signup_method_basic'
+	signup_method_facebook='signup_method_facebook'
+	signup_method_google='signup_method_google'
+
+	signup_flow_0='signup_flow_0'
+	signup_flow_1='signup_flow_1'
+	signup_flow_2='signup_flow_2'
+	signup_flow_3 ='signup_flow_3 '
+	signup_flow_12='signup_flow_12'
+	signup_flow_23='signup_flow_23'
+	signup_flow_24='signup_flow_24'
+	signup_flow_25='signup_flow_25'
+	signup_flow_others='signup_flow_others'
+
+	aff_channel_api='aff_channel_api'
+	aff_channel_content='aff_channel_content'
+	aff_channel_direct='aff_channel_direct'
+	aff_channel_other ='aff_channel_other '
+	aff_channel_remarketing='aff_channel_remarketing'
+	aff_channel_sem_brand='aff_channel_sem_brand'
+	aff_channel_sem_non_brand='aff_channel_sem_non_brand'
+	aff_channel_seo='aff_channel_seo'
+
+	aff_provider_bing='aff_provider_bing'
+	aff_provider_craigslist ='aff_provider_craigslist '
+	aff_provider_direct='aff_provider_direct'
+	aff_provider_facebook='aff_provider_facebook'
+	aff_provider_google='aff_provider_google'
+	aff_provider_other='aff_provider_other'
+
+	first_aff_tra_linked='first_aff_tra_linked'
+	first_aff_tra_omg='first_aff_tra_omg'
+	first_aff_tra_product='first_aff_tra_product'
+	first_aff_tra_other='first_aff_tra_other'
+	first_aff_tra_untracked='first_aff_tra_untracked'
+
+	signup_app_android='signup_app_android'
+	signup_app_moweb='signup_app_moweb'
+	signup_app_web='signup_app_web'
+	signup_app_iOS='signup_app_iOS'
+
+	first_dev_type_andr_phone='first_dev_type_andr_phone'
+	first_dev_type_andr_tab='first_dev_type_andr_tab'
+	first_dev_type_desk_other='first_dev_type_desk_other'
+	first_dev_type_mac_desk='first_dev_type_mac_desk'
+	first_dev_type_other='first_dev_type_other'
+	first_dev_type_win_desk='first_dev_type_win_desk'
+	first_dev_type_iPad='first_dev_type_iPad'
+	first_dev_type_iPhone ='first_dev_type_iPhone'
+
+	first_browser_Chrome='first_browser_Chrome'
+	first_browser_Firefox='first_browser_Firefox'
+	first_browser_IE='first_browser_IE'
+	first_browser_Mobile_Safari='first_browser_Mob_Safari'
+	first_browser_Safari='first_browser_Safari'
+	first_browser_Others='first_browser_Others'
+
+	language_eng='language_eng'
+	language_fra='language_fra'
+	language_ita='language_ita'
+	language_nld='language_nld'
+	language_por='language_por'
+	language_spa='language_spa'
+	language_others='language_others'
+
+	prim_dev_andr='prim_dev_andr'
+	prim_dev_mac_desk='prim_dev_mac_desk'
+	prim_dev_win_desk='prim_dev_win_desk'
+	prim_dev_iphone='prim_dev_iphone'
+	prim_dev_ipad='prim_dev_ipad'
+	prim_dev_unknown='prim_dev_unknown'
+	prim_dev_others='prim_dev_others'
+
+	month_1='month_1'
+	month_2='month_2'
+	month_3 ='month_3'
+	month_4='month_4'
+	month_5 ='month_5'
+	month_6 ='month_6'
+	month_7='month_7'
+	month_8='month_8'
+	month_9='month_9'
+	month_10='month_10'
+	month_11 ='month_11'
+	month_12='month_12'
+
+	trips_action='trips_action'
+	viewsearch_action='viewsearch_action'
+	wishlist_action='wishlist_action'
+	reviews_action='reviews_action'
+	booking_action='booking_action'
+	hostrelated_action='hostrelated_action'
+	profile_action='profile_action'
+	cancellation_action='cancellation_action'
+	coupon_action='coupon_action'
+	messagetohost_action='messagetohost_action'
+	;
+run;
+
+/*PROFILING*/
+data temp_2_au;
+	set airbnb3;
+
+	if country_destination ne 'AU';
+	group=0;
+
+	if age_new='18-25' then
+	age_18_25=1;
+	else age_18_25=0;
+
+	if age_new='26-35' then
+	age_26_35=1;
+	else age_26_35=0;
+
+	if age_new='36-45' then
+	age_36_45=1;
+	else age_36_45=0;
+
+	if age_new='46-55' then
+	age_46_55=1;
+	else age_46_55=0;
+
+	if age_new='56-65' then
+	age_56_65=1;
+	else age_56_65=0;
+
+	if age_new='66+' then
+	age_66_above=1;
+	else age_66_above=0;
+
+	if age_new='Unknown' then
+	age_unknown=1;
+	else age_unknown=0;
+
+	if gender='MALE' then
+	gender_male=1;
+	else gender_male=0;
+
+	if gender='FEMALE' then
+	gender_female=1;
+	else gender_female=0;
+
+	if gender='Unknown' then
+	gender_Unknown=1;
+	else gender_Unknown=0;
+
+	if signup_method='basic' then
+	signup_method_basic=1;
+	else signup_method_basic=0;
+
+	if signup_method='facebook' then
+	signup_method_facebook=1;
+	else signup_method_facebook=0;
+
+	if signup_method='google' then
+	signup_method_google=1;
+	else signup_method_google=0;
+
+	if signup_flow=0 then
+	signup_flow_0=1;
+	else signup_flow_0=0;
+
+	if signup_flow=1 then
+	signup_flow_1=1;
+	else signup_flow_1=0;
+
+	if signup_flow=2 then
+	signup_flow_2=1;
+	else signup_flow_2=0;
+
+	if signup_flow=3 then
+	signup_flow_3=1;
+	else signup_flow_3=0;
+
+	if signup_flow=12 then
+	signup_flow_12=1;
+	else signup_flow_12=0;
+
+	if signup_flow=23 then
+	signup_flow_23=1;
+	else signup_flow_23=0;
+
+	if signup_flow=24 then
+	signup_flow_24=1;
+	else signup_flow_24=0;
+
+	if signup_flow=25 then
+	signup_flow_25=1;
+	else signup_flow_25=0;
+
+	if signup_flow not in (1,2,3,12,23,24,25) then
+	signup_flow_others=1;
+	else signup_flow_others=0;
+
+	if affiliate_channel='api' then
+	aff_channel_api=1;
+	else aff_channel_api=0;
+
+	if affiliate_channel='content' then
+	aff_channel_content=1;
+	else aff_channel_content=0;
+
+	if aff_channel='direct' then
+	aff_channel_direct=1;
+	else aff_channel_direct=0;
+
+	if affiliate_channel='other' then
+	aff_channel_other=1;
+	else aff_channel_other=0;
+
+	if affliate_channel='remarketing' then
+	aff_channel_remarketing=1;
+	else aff_channel_remarketing=0;
+
+	if affiliate_channel='sem-brand' then
+	aff_channel_sem_brand=1;
+	else aff_channel_sem_brand=0;
+
+	if affiliate_channel='sem-non-brand' then
+	aff_channel_sem_non_brand=1;
+	else aff_channel_sem_non_brand=0;
+
+	if affiliate_channel='seo' then
+	aff_channel_seo=1;
+	else aff_channel_seo=0;
+
+	if affiliate_provider='bing' then
+	aff_provider_bing=1;
+	else aff_provider_bing=0;
+
+	if affiliate_provider='craigslist' then
+	aff_provider_craigslist=1;
+	else aff_provider_craigslist=0;
+
+	if affiliate_provider='direct' then
+	aff_provider_direct=1;
+	else aff_provider_direct=0;
+
+	if affiliate_provider='facebook' then
+	aff_provider_facebook=1;
+	else aff_provider_facebook=0;
+
+	if affiliate_provider='google' then
+	aff_provider_google=1;
+	else aff_provider_google=0;
+
+	if affiliate_provider='other' then
+	aff_provider_other=1;
+	else aff_provider_other=0;
+
+	if first_affiliate_tracked='linked' then
+	first_aff_tra_linked=1;
+	else first_aff_tra_linked=0;
+
+	if first_affiliate_tracked='omg' then
+	first_aff_tra_omg=1;
+	else first_aff_tra_omg=0;
+
+	if first_affiliate_tracked='product' then
+	first_aff_tra_product=1;
+	else first_aff_tra_product=0;
+
+	if first_affiliate_tracked in ('tracked-other','Other') then
+	first_aff_tra_other=1;
+	else first_aff_tra_other=0;
+
+	if first_affiliate_tracked='untracked' then
+	first_aff_tra_untracked=1;
+	else first_aff_tra_untracked=0;
+
+	if signup_app='Android' then
+	signup_app_android=1;
+	else signup_app_android=0;
+
+	if signup_app='Moweb' then
+	signup_app_moweb=1;
+	else signup_app_moweb=0;
+
+	if signup_app='Web' then
+	signup_app_web=1;
+	else signup_app_web=0;
+
+	if signup_app='iOS' then
+	signup_app_iOS=1;
+	else signup_app_iOS=0;
+
+	if first_device_type='Android Phone' then
+	first_dev_type_andr_phone=1;
+	else first_dev_type_andr_phone=0;
+
+	if first_device_type='Android Tablet' then
+	first_dev_type_andr_tab=1;
+	else first_dev_type_andr_tab=0;
+
+	if first_device_type='Desktop (Other)' then
+	first_dev_type_desk_other=1;
+	else first_dev_type_desk_other=0;
+
+	if first_device_type='Mac Desktop' then
+	first_dev_type_mac_desk=1;
+	else first_dev_type_mac_desk=0;
+
+	if first_device_type in ('Other/Unknown','SmartPhone (Other)') then
+	first_dev_type_other=1;
+	else first_dev_type_other=0;
+
+	if first_device_type='Windows Desktop' then
+	first_dev_type_win_desk=1;
+	else first_dev_type_win_desk=0;
+
+	if first_device_type='iPad' then
+	first_dev_type_iPad=1;
+	else first_dev_type_iPad=0;
+
+	if first_device_type='iPhone' then
+	first_dev_type_iPhone=1;
+	else first_dev_type_iPhone=0;
+
+	if first_browser='Chrome' then
+	first_browser_Chrome=1;
+	else first_browser_Chrome=0;
+
+	if first_browser='Firefox' then
+	first_browser_Firefox=1;
+	else first_browser_Firefox=0;
+
+	if first_browser='IE' then
+	first_browser_IE=1;
+	else first_browser_IE=0;
+
+	if first_browser='Mobile Safari' then
+	first_browser_Mob_Safari=1;
+	else first_browser_Mob_Safari=0;
+
+	if first_browser='Safari' then
+	first_browser_Safari=1;
+	else first_browser_Safari=0;
+
+	if first_browser='Others' then
+	first_browser_Others=1;
+	else first_browser_Others=0;
+
+	if language_new='eng' then
+	language_eng=1;
+	else language_eng=0;
+
+	if language_new='fra' then
+	language_fra=1;
+	else language_fra=0;
+
+	if language_new='ita' then
+	language_ita=1;
+	else language_ita=0;
+
+	if language_new='nld' then
+	language_nld=1;
+	else language_nld=0;
+
+	if language_new='por' then
+	language_por=1;
+	else language_por=0;
+
+	if language_new='spa' then
+	language_spa=1;
+	else language_spa=0;
+
+	if language_new='Others' then
+	language_others=1;
+	else language_others=0;
+
+	if Primary in ("Android App Unknown Phone/Tablet","Android Phone") then
+	prim_dev_andr=1;
+	else prim_dev_andr=0;
+
+	if Primary in ("Mac Desktop") then
+	prim_dev_mac_desk=1;
+	else prim_dev_mac_desk=0;
+
+	if Primary in ("Windows Desktop","Windows Phone") then
+	prim_dev_win_desk=1;
+	else prim_dev_win_desk=0;
+
+	if Primary in ("iPhone") then
+	prim_dev_iphone=1;
+	else prim_dev_iphone=0;
+
+	if Primary in ("iPad Tablet","iPodtouch") then
+	prim_dev_ipad=1;
+	else prim_dev_ipad=0;
+
+	if Primary in ("Unknown") then
+	prim_dev_unknown=1;
+	else prim_dev_unknown=0;
+
+	if Primary in ("Blackberry","Chromebook","Linux Desktop","Tablet") then
+	prim_dev_others=1;
+	else prim_dev_others=0;
+
+	if month_account_created=1 then
+	month_1=1;
+	else month_1=0;
+
+	if month_account_created=2 then
+	month_2=1;
+	else month_2=0;
+
+	if month_account_created=3 then
+	month_3=1;
+	else month_3=0;
+
+	if month_account_created=4 then
+	month_4=1;
+	else month_4=0;
+
+	if month_account_created=5 then
+	month_5=1;
+	else month_5=0;
+
+	if month_account_created=6 then
+	month_6=1;
+	else month_6=0;
+
+	if month_account_created=7 then
+	month_7=1;
+	else month_7=0;
+
+	if month_account_created=8 then
+	month_8=1;
+	else month_8=0;
+
+	if month_account_created=9 then
+	month_9=1;
+	else month_9=0;
+
+	if month_account_created=10 then
+	month_10=1;
+	else month_10=0;
+
+	if month_account_created=11 then
+	month_11=1;
+	else month_11=0;
+
+	if month_account_created=12 then
+	month_12=1;
+	else month_12=0;
+	keep
+	group 
+
+	age_18_25
+	age_26_35
+	age_36_45
+	age_46_55
+	age_56_65
+	age_66_above
+	age_Unknown
+
+	gender_male
+	gender_female
+	gender_Unknown
+
+	signup_method_basic
+	signup_method_facebook
+	signup_method_google
+
+	signup_flow_0
+	signup_flow_1
+	signup_flow_2
+	signup_flow_3 
+	signup_flow_12
+	signup_flow_23
+	signup_flow_24
+	signup_flow_25
+	signup_flow_others
+
+	aff_channel_api
+	aff_channel_content
+	aff_channel_direct
+	aff_channel_other 
+	aff_channel_remarketing	
+	aff_channel_sem_brand
+	aff_channel_sem_non_brand
+	aff_channel_seo
+
+	aff_provider_bing
+	aff_provider_craigslist 
+	aff_provider_direct
+	aff_provider_facebook
+	aff_provider_google
+	aff_provider_other
+
+	first_aff_tra_linked
+	first_aff_tra_omg
+	first_aff_tra_product
+	first_aff_tra_other
+	first_aff_tra_untracked
+
+	signup_app_android
+	signup_app_moweb
+	signup_app_web
+	signup_app_iOS
+
+	first_dev_type_andr_phone
+	first_dev_type_andr_tab
+	first_dev_type_desk_other
+	first_dev_type_mac_desk
+	first_dev_type_other
+	first_dev_type_win_desk
+	first_dev_type_iPad
+	first_dev_type_iPhone 
+
+	first_browser_Chrome
+	first_browser_Firefox
+	first_browser_IE
+	first_browser_Mob_Safari
+	first_browser_Safari
+	first_browser_Others
+
+	language_eng
+	language_fra
+	language_ita
+	language_nld
+	language_por
+	language_spa
+	language_others
+
+	prim_dev_andr
+	prim_dev_mac_desk
+	prim_dev_win_desk
+	prim_dev_iphone
+	prim_dev_ipad
+	prim_dev_unknown
+	prim_dev_others
+
+	month_1
+	month_2
+	month_3 
+	month_4
+	month_5 
+	month_6 
+	month_7
+	month_8
+	month_9
+	month_10
+	month_11 
+	month_12
+
+	trips_action
+	viewsearch_action
+	wishlist_action
+	reviews_action
+	booking_action
+	hostrelated_action
+	profile_action
+	cancellation_action
+	coupon_action
+	messagetohost_action
+
+	;
+	label
+	age_18_25='age_18_25'
+	age_26_35='age_26_35'
+	age_36_45='age_36_45'
+	age_46_55='age_46_55'
+	age_56_65='age_56_65'
+	age_66_above='age_66_above'
+	age_Unknown='age_Unknown'
+
+	gender_male='gender_male'
+	gender_female='gender_female'
+	gender_Unknown='gender_Unknown'
+
+	signup_method_basic='signup_method_basic'
+	signup_method_facebook='signup_method_facebook'
+	signup_method_google='signup_method_google'
+
+	signup_flow_0='signup_flow_0'
+	signup_flow_1='signup_flow_1'
+	signup_flow_2='signup_flow_2'
+	signup_flow_3 ='signup_flow_3 '
+	signup_flow_12='signup_flow_12'
+	signup_flow_23='signup_flow_23'
+	signup_flow_24='signup_flow_24'
+	signup_flow_25='signup_flow_25'
+	signup_flow_others='signup_flow_others'
+
+	aff_channel_api='aff_channel_api'
+	aff_channel_content='aff_channel_content'
+	aff_channel_direct='aff_channel_direct'
+	aff_channel_other ='aff_channel_other '
+	aff_channel_remarketing='aff_channel_remarketing'
+	aff_channel_sem_brand='aff_channel_sem_brand'
+	aff_channel_sem_non_brand='aff_channel_sem_non_brand'
+	aff_channel_seo='aff_channel_seo'
+
+	aff_provider_bing='aff_provider_bing'
+	aff_provider_craigslist ='aff_provider_craigslist '
+	aff_provider_direct='aff_provider_direct'
+	aff_provider_facebook='aff_provider_facebook'
+	aff_provider_google='aff_provider_google'
+	aff_provider_other='aff_provider_other'
+
+	first_aff_tra_linked='first_aff_tra_linked'
+	first_aff_tra_omg='first_aff_tra_omg'
+	first_aff_tra_product='first_aff_tra_product'
+	first_aff_tra_other='first_aff_tra_other'
+	first_aff_tra_untracked='first_aff_tra_untracked'
+
+	signup_app_android='signup_app_android'
+	signup_app_moweb='signup_app_moweb'
+	signup_app_web='signup_app_web'
+	signup_app_iOS='signup_app_iOS'
+
+	first_dev_type_andr_phone='first_dev_type_andr_phone'
+	first_dev_type_andr_tab='first_dev_type_andr_tab'
+	first_dev_type_desk_other='first_dev_type_desk_other'
+	first_dev_type_mac_desk='first_dev_type_mac_desk'
+	first_dev_type_other='first_dev_type_other'
+	first_dev_type_win_desk='first_dev_type_win_desk'
+	first_dev_type_iPad='first_dev_type_iPad'
+	first_dev_type_iPhone ='first_dev_type_iPhone'
+
+	first_browser_Chrome='first_browser_Chrome'
+	first_browser_Firefox='first_browser_Firefox'
+	first_browser_IE='first_browser_IE'
+	first_browser_Mob_Safari='first_browser_Mob_Safari'
+	first_browser_Safari='first_browser_Safari'
+	first_browser_Others='first_browser_Others'
+
+	language_eng='language_eng'
+	language_fra='language_fra'
+	language_ita='language_ita'
+	language_nld='language_nld'
+	language_por='language_por'
+	language_spa='language_spa'
+	language_others='language_others'
+
+	prim_dev_andr='prim_dev_andr'
+	prim_dev_mac_desk='prim_dev_mac_desk'
+	prim_dev_win_desk='prim_dev_win_desk'
+	prim_dev_iphone='prim_dev_iphone'
+	prim_dev_ipad='prim_dev_ipad'
+	prim_dev_unknown='prim_dev_unknown'
+	prim_dev_others='prim_dev_others'
+
+	month_1='month_1'
+	month_2='month_2'
+	month_3 ='month_3'
+	month_4='month_4'
+	month_5 ='month_5'
+	month_6 ='month_6'
+	month_7='month_7'
+	month_8='month_8'
+	month_9='month_9'
+	month_10='month_10'
+	month_11 ='month_11'
+	month_12='month_12'
+
+	trips_action='trips_action'
+	viewsearch_action='viewsearch_action'
+	wishlist_action='wishlist_action'
+	reviews_action='reviews_action'
+	booking_action='booking_action'
+	hostrelated_action='hostrelated_action'
+	profile_action='profile_action'
+	cancellation_action='cancellation_action'
+	coupon_action='coupon_action'
+	messagetohost_action='messagetohost_action'
+	;
+run;
+
+data temp12_au;
+	set temp_1_au temp_2_au;
+run;
+
+proc means data = temp12_au noprint;
+	class group;
+	VAR
+	age_18_25
+	age_26_35
+	age_36_45
+	age_46_55
+	age_56_65
+	age_66_above
+	age_Unknown
+
+	gender_male
+	gender_female
+	gender_Unknown
+
+	signup_method_basic
+	signup_method_facebook
+	signup_method_google
+
+	signup_flow_0
+	signup_flow_1
+	signup_flow_2
+	signup_flow_3 
+	signup_flow_12
+	signup_flow_23
+	signup_flow_24
+	signup_flow_25
+	signup_flow_others
+
+	aff_channel_api
+	aff_channel_content
+	aff_channel_direct
+	aff_channel_other 
+	aff_channel_remarketing	
+	aff_channel_sem_brand
+	aff_channel_sem_non_brand
+	aff_channel_seo
+
+	aff_provider_bing
+	aff_provider_craigslist 
+	aff_provider_direct
+	aff_provider_facebook
+	aff_provider_google
+	aff_provider_other
+
+	first_aff_tra_linked
+	first_aff_tra_omg
+	first_aff_tra_product
+	first_aff_tra_other
+	first_aff_tra_untracked
+
+	signup_app_android
+	signup_app_moweb
+	signup_app_web
+	signup_app_iOS
+
+	first_dev_type_andr_phone
+	first_dev_type_andr_tab
+	first_dev_type_desk_other
+	first_dev_type_mac_desk
+	first_dev_type_other
+	first_dev_type_win_desk
+	first_dev_type_iPad
+	first_dev_type_iPhone 
+
+	first_browser_Chrome
+	first_browser_Firefox
+	first_browser_IE
+	first_browser_Mob_Safari
+	first_browser_Safari
+	first_browser_Others
+
+	language_eng
+	language_fra
+	language_ita
+	language_nld
+	language_por
+	language_spa
+	language_others
+
+	prim_dev_andr
+	prim_dev_mac_desk
+	prim_dev_win_desk
+	prim_dev_iphone
+	prim_dev_ipad
+	prim_dev_unknown
+	prim_dev_others
+
+	month_1
+	month_2
+	month_3 
+	month_4
+	month_5 
+	month_6 
+	month_7
+	month_8
+	month_9
+	month_10
+	month_11 
+	month_12
+	trips_action
+	viewsearch_action
+	wishlist_action
+	reviews_action
+	booking_action
+	hostrelated_action
+	profile_action
+	cancellation_action
+	coupon_action
+	messagetohost_action;
+	output out = means mean(
+	age_18_25
+	age_26_35
+	age_36_45
+	age_46_55
+	age_56_65
+	age_66_above
+	age_Unknown
+
+	gender_male
+	gender_female
+	gender_Unknown
+
+	signup_method_basic
+	signup_method_facebook
+	signup_method_google
+
+	signup_flow_0
+	signup_flow_1
+	signup_flow_2
+	signup_flow_3 
+	signup_flow_12
+	signup_flow_23
+	signup_flow_24
+	signup_flow_25
+	signup_flow_others
+
+	aff_channel_api
+	aff_channel_content
+	aff_channel_direct
+	aff_channel_other 
+	aff_channel_remarketing	
+	aff_channel_sem_brand
+	aff_channel_sem_non_brand
+	aff_channel_seo
+
+	aff_provider_bing
+	aff_provider_craigslist 
+	aff_provider_direct
+	aff_provider_facebook
+	aff_provider_google
+	aff_provider_other
+
+	first_aff_tra_linked
+	first_aff_tra_omg
+	first_aff_tra_product
+	first_aff_tra_other
+	first_aff_tra_untracked
+
+	signup_app_android
+	signup_app_moweb
+	signup_app_web
+	signup_app_iOS
+
+	first_dev_type_andr_phone
+	first_dev_type_andr_tab
+	first_dev_type_desk_other
+	first_dev_type_mac_desk
+	first_dev_type_other
+	first_dev_type_win_desk
+	first_dev_type_iPad
+	first_dev_type_iPhone 
+
+	first_browser_Chrome
+	first_browser_Firefox
+	first_browser_IE
+	first_browser_Mob_Safari
+	first_browser_Safari
+	first_browser_Others
+
+	language_eng
+	language_fra
+	language_ita
+	language_nld
+	language_por
+	language_spa
+	language_others
+
+	prim_dev_andr
+	prim_dev_mac_desk
+	prim_dev_win_desk
+	prim_dev_iphone
+	prim_dev_ipad
+	prim_dev_unknown
+	prim_dev_others
+
+	month_1
+	month_2
+	month_3 
+	month_4
+	month_5 
+	month_6 
+	month_7
+	month_8
+	month_9
+	month_10
+	month_11 
+	month_12
+	trips_action
+	viewsearch_action
+	wishlist_action
+	reviews_action
+	booking_action
+	hostrelated_action
+	profile_action
+	cancellation_action
+	coupon_action
+	messagetohost_action)=/autoname;
+
+proc transpose data=means out=mt name=variable;
+run;
+
+proc transpose data=means out=total(rename=(col1=total col2=grp2n col3=grp1n)) name=vartots;
+	var _freq_;
+run;
+
+data mt1 (rename=(col1=ALL col2 = GRP2 col3=GRP1));
+	if _n_=1 then
+	set total;
+	set mt;
+	format universe comma11.;
+
+	if col2 le 0 then
+	delete;
+	UNIVERSE=round(col1* 213451);
+	INDEX=round((col3/col2)*100);
+run;
+
+data all;
+	set mt1;
+	label grp1=Responders;
+	label grp2=NonResponders;
+	grp1=round(grp1*100,.01);
+	grp2=round(grp2*100,.01);
+	all=round(all*100,.01);
+	var_label=_label_;
+
+	if all le .05 then
+	delete;
+	n=(grp1-grp2)/100;
+	p=(grp1n*grp1/100 + grp2n*grp2/100)/(grp1n+grp2n);
+	q=1-p;
+
+	if q le 0 then
+	delete;
+
+	if p le 0 then
+	delete;
+	se=sqrt(p*q*(1/grp1n + 1/grp2n));
+	z=n/se;
+
+	if z ge 1.96 or z le -1.96 then
+	SIG='* ';
+
+	if z ge 2.576 or z le -2.576 then
+	SIG='**';
+
+	if grp1 le 5 and grp2 lt 5 then
+	SIG=' ';
+
+	if grp1 gt 95 and grp2 gt 95 then
+	SIG=' ';
+run;
+
+proc freq data=all;
+	tables variable;
+run;
+
+options source source2;
+
+data all1;
+	set all;
+	length orig_var $40.;
+
+	if variable="age_18_25_Mean" then
+	orig_var="Age";
+
+	if variable="age_26_35_Mean" then
+	orig_var="Age";
+
+	if variable="age_36_45_Mean" then
+	orig_var="Age";
+
+	if variable="age_46_55_Mean" then
+	orig_var="Age";
+
+	if variable="age_56_65_Mean" then
+	orig_var="Age";
+
+	if variable="age_66_above_Mean" then
+	orig_var="Age";
+
+	if variable="age_unknown_Mean" then
+	orig_var="Age";
+
+	if variable="gender_male_Mean" then
+	orig_var="Gender";
+
+	if variable="gender_female_Mean" then
+	orig_var="Gender";
+
+	if variable="gender_Unknown_Mean" then
+	orig_var="Gender";
+
+	if variable="signup_method_basic_Mean" then
+	orig_var="Signup Method";
+
+	if variable="signup_method_facebook_Mean" then
+	orig_var="Signup Method";
+
+	if variable="signup_method_google_Mean" then
+	orig_var="Signup Method";
+
+	if variable="signup_flow_0_Mean" then
+	orig_var="Signup Flow";
+
+	if variable="signup_flow_1_Mean" then
+	orig_var="Signup Flow";
+
+	if variable="signup_flow_2_Mean" then
+	orig_var="Signup Flow";
+
+	if variable="signup_flow_3_Mean" then
+	orig_var="Signup Flow";
+
+	if variable="signup_flow_12_Mean" then
+	orig_var="Signup Flow";
+
+	if variable="signup_flow_23_Mean" then
+	orig_var="Signup Flow";
+
+	if variable="signup_flow_24_Mean" then
+	orig_var="Signup Flow";
+
+	if variable="signup_flow_25_Mean" then
+	orig_var="Signup Flow";
+
+	if variable="signup_flow_others_Mean" then
+	orig_var="Signup Flow";
+
+	if variable="aff_channel_api_Mean" then
+	orig_var="Aff Channel";
+
+	if variable="aff_channel_content_Mean" then
+	orig_var="Aff Channel";
+
+	if variable="aff_channel_direct_Mean" then
+	orig_var="Aff Channel";
+
+	if variable="aff_channel_other_Mean" then
+	orig_var="Aff Channel";
+
+	if variable="aff_channel_remarketing_Mean" then
+	orig_var="Aff Channel";
+
+	if variable="aff_channel_sem_brand_Mean" then
+	orig_var="Aff Channel";
+
+	if variable="aff_channel_sem_non_brand_Mean" then
+	orig_var="Aff Channel";
+
+	if variable="aff_channel_seo_Mean" then
+	orig_var="Aff Channel";
+
+	if variable="aff_provider_bing_Mean" then
+	orig_var="Aff Provider";
+
+	if variable="aff_provider_craigslist_Mean" then
+	orig_var="Aff Provider";
+
+	if variable="aff_provider_direct_Mean" then
+	orig_var="Aff Provider";
+
+	if variable="aff_provider_facebook_Mean" then
+	orig_var="Aff Provider";
+
+	if variable="aff_provider_google_Mean" then
+	orig_var="Aff Provider";
+
+	if variable="aff_provider_other_Mean" then
+	orig_var="Aff Provider";
+
+	if variable="first_aff_tra_linked_Mean" then
+	orig_var="First Aff Tracked";
+
+	if variable="first_aff_tra_omg_Mean" then
+	orig_var="First Aff Tracked";
+
+	if variable="first_aff_tra_product_Mean" then
+	orig_var="First Aff Tracked";
+
+	if variable="first_aff_tra_other_Mean" then
+	orig_var="First Aff Tracked";
+
+	if variable="first_aff_tra_untracked_Mean" then
+	orig_var="First Aff Tracked";
+
+	if variable="signup_app_android_Mean" then
+	orig_var="Signup App";
+
+	if variable="signup_app_moweb_Mean" then
+	orig_var="Signup App";
+
+	if variable="signup_app_web_Mean" then
+	orig_var="Signup App";
+
+	if variable="signup_app_iOS_Mean" then
+	orig_var="Signup App";
+
+	if variable="first_dev_type_andr_phone_Mean" then
+	orig_var="First Device Type";
+
+	if variable="first_dev_type_andr_tab_Mean" then
+	orig_var="First Device Type";
+
+	if variable="first_dev_type_desk_other_Mean" then
+	orig_var="First Device Type";
+
+	if variable="first_dev_type_mac_desk_Mean" then
+	orig_var="First Device Type";
+
+	if variable="first_dev_type_other_Mean" then
+	orig_var="First Device Type";
+
+	if variable="first_dev_type_win_desk_Mean" then
+	orig_var="First Device Type";
+
+	if variable="first_dev_type_iPad_Mean" then
+	orig_var="First Device Type";
+
+	if variable="first_dev_type_iPhone_Mean" then
+	orig_var="First Device Type";
+
+	if variable="first_browser_Chrome_Mean" then
+	orig_var="First Browser";
+
+	if variable="first_browser_Firefox_Mean" then
+	orig_var="First Browser";
+
+	if variable="first_browser_IE_Mean" then
+	orig_var="First Browser";
+
+	if variable="first_browser_Mob_Safari_Mean" then
+	orig_var="First Browser";
+
+	if variable="first_browser_Safari_Mean" then
+	orig_var="First Browser";
+
+	if variable="first_browser_Others_Mean" then
+	orig_var="First Browser";
+
+	if variable="language_eng_Mean" then
+	orig_var="Language";
+
+	if variable="language_fra_Mean" then
+	orig_var="Language";
+
+	if variable="language_ita_Mean" then
+	orig_var="Language";
+
+	if variable="language_nld_Mean" then
+	orig_var="Language";
+
+	if variable="language_por_Mean" then
+	orig_var="Language";
+
+	if variable="language_spa_Mean" then
+	orig_var="Language";
+
+	if variable="language_others_Mean" then
+	orig_var="Language";
+
+	if variable="prim_dev_andr_Mean" then
+	orig_var="Primary Device";
+
+	if variable="prim_dev_mac_desk_Mean" then
+	orig_var="Primary Device";
+
+	if variable="prim_dev_win_desk_Mean" then
+	orig_var="Primary Device";
+
+	if variable="prim_dev_iphone_Mean" then
+	orig_var="Primary Device";
+
+	if variable="prim_dev_ipad_Mean" then
+	orig_var="Primary Device";
+
+	if variable="prim_dev_unknown_Mean" then
+	orig_var="Primary Device";
+
+	if variable="prim_dev_others_Mean" then
+	orig_var="Primary Device";
+
+	if variable="month_1_Mean" then
+	orig_var="Month";
+
+	if variable="month_2_Mean" then
+	orig_var="Month";
+
+	if variable="month_3_Mean" then
+	orig_var="Month";
+
+	if variable="month_4_Mean" then
+	orig_var="Month";
+
+	if variable="month_5_Mean" then
+	orig_var="Month";
+
+	if variable="month_6_Mean" then
+	orig_var="Month";
+
+	if variable="month_7_Mean" then
+	orig_var="Month";
+
+	if variable="month_8_Mean" then
+	orig_var="Month";
+
+	if variable="month_9_Mean" then
+	orig_var="Month";
+
+	if variable="month_10_Mean" then
+	orig_var="Month";
+
+	if variable="month_11_Mean" then
+	orig_var="Month";
+
+	if variable="month_12_Mean" then
+	orig_var="Month";
+
+	if variable="trips_action_Mean" then
+	orig_var="Action Type";
+
+	if variable="viewsearch_action_Mean" then
+	orig_var="Action Type";
+	
+	if variable="wishlist_action_Mean" then
+	orig_var="Action Type";
+
+	if variable="reviews_action_Mean" then
+	orig_var="Action Type";
+
+	if variable="booking_action_Mean" then
+	orig_var="Action Type";
+
+	if variable="hostrelated_action_Mean" then
+	orig_var="Action Type";
+
+	if variable="profile_action_Mean" then
+	orig_var="Action Type";
+
+	if variable="cancellation_action_Mean" then
+	orig_var="Action Type";
+
+	if variable="coupon_action_Mean" then
+	orig_var="Action Type";
+
+	if variable="messagetohost_action_Mean" then
+	orig_var="Action Type";
+
+	
+proc sort data=all1;
+	by index;
+run;
+
+proc print data=all1 noobs label;
+	title1 'Profile Report';
+	title2  "Profile of Responders vs Non Responders";
+/*	title3 'Feb  13, 2017';*/
+	var var_label orig_var UNIVERSE ALL GRP2 GRP1 INDEX SIG;
+run;
