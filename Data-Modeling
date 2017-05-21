@@ -1,0 +1,182 @@
+data model_au;
+set temp12_au;
+run;
+
+data model_au1;
+set model_au;
+if ranuni(698) le 0.5 then model=1;
+else validate=1;
+run;
+
+data modeldata_au;
+  set model_au1;
+  if model=1;
+  run;
+
+data valdata_au;
+  set model_au1;
+  if validate=1;
+run;
+
+
+proc logistic data=modeldata_au descending ;
+class group / param=ref ;
+model group=
+age_18_25
+age_26_35
+age_36_45
+age_46_55
+age_56_65
+age_66_above
+age_unknown
+
+gender_male
+gender_female
+gender_unknown
+
+signup_method_basic
+signup_method_facebook
+signup_method_google
+
+signup_flow_0
+signup_flow_1
+signup_flow_2
+signup_flow_3 
+signup_flow_12
+signup_flow_23
+signup_flow_24
+signup_flow_25
+signup_flow_others
+
+aff_channel_api
+aff_channel_content
+aff_channel_direct
+aff_channel_other 
+aff_channel_remarketing	
+aff_channel_sem_brand
+aff_channel_sem_non_brand
+aff_channel_seo
+
+aff_provider_bing
+aff_provider_craigslist 
+aff_provider_direct
+aff_provider_facebook
+aff_provider_google
+aff_provider_other
+
+first_aff_tra_linked
+first_aff_tra_omg
+first_aff_tra_product
+first_aff_tra_other
+first_aff_tra_untracked
+
+signup_app_android
+signup_app_moweb
+signup_app_web
+signup_app_iOS
+
+first_dev_type_andr_phone
+first_dev_type_andr_tab
+first_dev_type_desk_other
+first_dev_type_mac_desk
+first_dev_type_other
+first_dev_type_win_desk
+first_dev_type_iPad
+first_dev_type_iPhone 
+
+first_browser_Chrome
+first_browser_Firefox
+first_browser_IE
+first_browser_Mob_Safari
+first_browser_Safari
+first_browser_Others
+
+language_eng
+language_fra
+language_ita
+language_nld
+language_por
+language_spa
+language_others
+
+prim_dev_andr
+prim_dev_mac_desk
+prim_dev_win_desk
+prim_dev_iphone
+prim_dev_ipad
+prim_dev_unknown
+prim_dev_others
+
+month_1
+month_2
+month_3 
+month_4
+month_5 
+month_6 
+month_7
+month_8
+month_9
+month_10
+month_11 
+month_12
+
+trips_action
+viewsearch_action
+wishlist_action
+reviews_action
+booking_action
+hostrelated_action
+profile_action
+cancellation_action
+coupon_action
+messagetohost_action
+
+/selection =stepwise slentry=0.05 slstay=0.05 lackfit rsq;
+score out=score1;
+run;
+
+/*proc logistic data=valdata_au descending ;*/
+/*class group / param=ref ;*/
+/*model group=*/
+/*signup_method_basic*/
+/*month_11*/
+/**/
+/*;*/
+/**/
+/*run;*/
+
+proc logistic data=modeldata_au descending ;
+class group / param=ref ;
+model group=
+gender_male
+signup_flow_0
+gender_female
+signup_method_basic
+month_6
+;
+
+proc reg data=modeldata_au;
+model group=
+gender_male
+signup_flow_0
+gender_female
+signup_method_basic
+month_6
+/ tol vif collin;
+run;
+
+data scoring;
+set valdata_au;
+score=-7.6468 - 1.1028*(gender_male) +0.5395*(signup_flow_0) + 1.0045*(gender_female) + 0.2473*(signup_method_basic) + 0.2905*(month_6);
+score1=exp(score);
+p_resp=score1/(1+score1);
+run;
+
+proc rank data=scoring out=score1_rank descending groups=10;
+var p_resp;
+ranks p_resp;
+run;
+
+proc freq data=score1_rank;
+tables p_resp p_resp*group;
+run;
