@@ -1,0 +1,555 @@
+/*Univariate Analysis - For each variable to understand the data*/
+/*proc freq*/
+/*proc contents*/
+
+proc univariate data=train_users_2;
+var age ;
+run;
+
+/*Language and Age variable*/
+data temp1(drop=language age);
+set train_users_2;
+length language_new $10. age_new $10.;
+if first_browser not in ('Chrome','Unknown' 'Firefox','IE','Mobile Safari','Safari') then first_browser='Others';
+if first_affiliate_tracked in ('marketing','local ops') then first_affiliate_tracked='Other';
+if first_affiliate_tracked in ('') then first_affiliate_tracked='Unknown';
+if affiliate_provider not in ('bing','craigslist','direct','facebook','google','other') then affiliate_provider='other';
+if language = 'en' then language_new = 'eng';
+else if language = 'de' then language_new = 'deu';
+else if language = 'es' then language_new = 'spa';
+else if language = 'fr' then language_new = 'fra';
+else if language = 'it' then language_new = 'ita';
+else if language = 'nl' then language_new = 'nld';
+else if language = 'pt' then language_new = 'por';
+else language_new='Others';
+ 
+if age > 1900 then age_new=2015-age;
+else age_new=age;
+ 
+if 1<=age<=25 then age_new='18-25';
+else if 26<=age<=35 then age_new='26-35';
+else if 36<=age<=45 then age_new='36-45';
+else if 46<=age<=55 then age_new='46-55';
+else if 56<=age<=65 then age_new='56-65';
+else if age>65 then age_new='66+';
+else age_new='Unknown';
+run;
+/*Check the frequency of the ages*/
+proc freq data=temp1;
+tables age_new ;
+run;
+
+/*Anamoly between Date of Account Created and Date of First Booking - Assumption*/
+data temp2;
+set temp1;
+if date_account_created>date_first_booking and date_first_booking ne .
+then date_account_created=date_first_booking;
+no_of_days=date_first_booking- date_account_created;
+run;
+
+proc univariate data=temp2;
+var no_of_days;
+run;
+
+/*SESSIONS OF TRAIN USERS*/
+ 
+proc sql;
+create table sessions as
+select *
+from sessions
+where user_id in (select id from train_users_2 );
+quit;
+ 
+/*Out of 213451 train users, 73815 in session*/
+ 
+/*SESSIONS COUNTRY*/
+ 
+proc sql;
+create table sessions_country as
+select a.*, b.country_destination
+from sessions a left join train_users_2 b
+on a.user_id=b.id;
+quit;
+ 
+/*ADD DESTINATION COUNTRY*/
+ 
+proc sql;
+create table temp3 as
+select a.*, b.destination_language
+from temp2 a left join countries b
+on a.country_destination=b.country_destination;
+quit;
+ 
+/*ADD DAY, MONTH ADD WEEKDAY/WEEKEND FLAG*/
+ 
+data temp4;
+set temp3;
+if date_first_booking ne .
+then day_first_booking = weekday(date_first_booking);
+run;
+ 
+data temp5;
+set temp4;
+if date_first_booking ne .
+then month_first_booking = month(date_first_booking);
+if day_first_booking = 6 or day_first_booking = 7
+then Business_day = 'weekend';
+else if day_first_booking = . then Business_day = .;
+else Business_day = 'weekday';
+run;
+ 
+/*Check/Add primary secondary devices*/
+ 
+proc sql;
+create table sessions_devices as
+select distinct user_id,
+count(distinct device_type) as devices
+from SESSIONS_COUNTRY
+group by 1;
+quit;
+ 
+proc sql;
+create table sessions_devices as
+select distinct user_id,
+device_type,
+sum(secs_elapsed) as total_time
+from SESSIONS_COUNTRY
+group by 1,2;
+quit;
+ 
+proc sort data=sessions_devices;
+by  user_id descending total_time  ;
+run;
+ 
+proc rank data=sessions_devices out=sessions_devices_rank descending;
+by user_id;
+var total_time;
+ranks rank;
+run;
+ 
+data sessions_devices_rank1(keep=user_id device_type rank flag);
+set sessions_devices_rank;
+length flag $10;
+if rank=1 then Flag="Primary";
+else Flag="Secondary";
+where rank in (1,2);
+run;
+ 
+proc transpose data=sessions_devices_rank1 out=sessions_devices_t(drop=_name_);
+by user_id;
+id Flag;
+var device_type;
+run;
+ 
+proc sql;
+create table temp6 as
+select a.*, b.primary,b.secondary
+from temp5 a left join sessions_devices_t b
+on a.id=b.user_id;
+quit;
+
+/*ADD Action_ype*/
+ 
+proc sql;
+create table action as
+select distinct user_id,
+action_type,
+count(distinct action_type) as  count_action
+from SESSIONS_COUNTRY
+group by 1,2;
+quit;
+ 
+proc transpose data=action out=action_t(drop=_name_ booking_response '-unknown-'n);
+by user_id;
+id action_type;
+var count_action;
+run;
+ 
+proc sql;
+create table temp7 as
+select a.*, b.booking_request,b.click,
+b.data,
+b.message_post,
+b.partner_callback,
+b.submit,
+b.view
+from temp6 a left join action_t b
+on a.id=b.user_id;
+quit;
+ 
+/*Duration before  booking*/
+ 
+data pre_booking;
+  set SESSIONS_COUNTRY;
+  rownum=_n_;
+run;
+ 
+proc sql;
+create table booking_id as
+select distinct user_id
+from pre_booking
+where action_type="booking_request";
+quit;
+ 
+proc sql;
+create table pre_booking1 as
+select *
+from pre_booking
+where user_id in (select distinct user_id from booking_id);
+quit;
+ 
+data pre_booking2;
+set pre_booking1;
+if action_type="booking_request" then flag=rownum;
+else flag=0 ;
+if secs_elapsed=. then secs_elapsed=0;
+run;
+ 
+data pre_booking3;
+set pre_booking2;
+if flag>rownum then delete;
+run;
+ 
+proc sql;
+create table timeprebooking as
+select distinct user_id,
+sum(secs_elapsed) as time_spent_prebooking
+from pre_booking3
+group by 1;
+quit;
+ 
+proc sql;
+create table temp8 as
+select a.*, b.time_spent_prebooking
+from temp7 a left join timeprebooking b
+on a.id=b.user_id;
+quit;
+ 
+/*ADD MONTH FROM ACCOUNT CREATED*/
+ 
+data temp9;
+set temp8;
+if date_account_created ne .
+then MONTH_account_created = MONTH(date_account_created);
+run;
+ 
+/*TIME SPENT ONLINE*/
+ 
+proc sql;
+create table timeonline as
+select distinct user_id,
+sum(secs_elapsed) as time_spent_online
+from sessions_country
+group by 1;
+quit;
+ 
+proc sql;
+create table temp10 as
+select a.*, b.time_spent_online
+from temp9 a left join timeonline b
+on a.id=b.user_id;
+quit;
+ 
+ 
+/*MASTER DATA SET*/
+ 
+data airbnb1(keep=id gender signup_method signup_flow affiliate_channel affiliate_provider first_affiliate_tracked signup_app first_device_type first_browser language_new age_new
+Primary
+Secondary
+MONTH_account_created
+time_spent_online
+country_destination);
+set temp10;
+run;
+ 
+data airbnb2;
+set airbnb1;
+if Primary in ("","-unknown-") then Primary="Unknown";
+if Secondary in ("","-unknown-") then Secondary="Unknown";
+if gender in ("-unknown-") then gender="Unknown";
+if time_spent_online ne . then time_spent_online_new=time_spent_online/3600;
+run;
+ 
+proc univariate data=airbnb2;
+var time_spent_online_new;
+run;
+
+/*Dummy Variables - Age*/
+data airbnb2_new;
+set airbnb2;
+if age_new='18-25' then age_18_25=1;
+else age_18_25=0;
+if age_new='26-35' then age_26_35=1;
+else age_26_35=0;
+if age_new='36-45' then age_36_45=1;
+else age_36_45=0;
+if age_new='46-55' then age_46_55=1;
+else age_46_55=0;
+if age_new='56-65' then age_56_65=1;
+else age_56_65=0;
+if age_new='66+' then age_66_above=1;
+else age_66_above=0;
+if age_new='Unknown' then age_unknown=1;
+else age_unknown=0;
+
+/*Dummy Variables - Gender*/
+if gender='MALE' then gender_male=1;
+else gender_male=0;
+if gender='FEMALE' then gender_female=1;
+else gender_female=0;
+if gender='Unknown' then gender_Unknown=1;
+else gender_Unknown=0;
+
+
+/*Dummy Variables - SignUp_Method*/
+if signup_method='basic' then signup_method_basic=1;
+else signup_method_basic=0;
+if signup_method='facebook' then signup_method_facebook=1;
+else signup_method_facebook=0;
+if signup_method='google' then signup_method_google=1;
+else signup_method_google=0;
+
+/*Dummy Variables - SignUp Flow*/
+if signup_flow=0 then signup_flow_0=1;
+else signup_flow_0=0;
+if signup_flow=1 then signup_flow_1=1;
+else signup_flow_1=0;
+if signup_flow=2 then signup_flow_2=1;
+else signup_flow_2=0;
+if signup_flow=3 then signup_flow_3=1;
+else signup_flow_3=0;
+if signup_flow=12 then signup_flow_12=1;
+else signup_flow_12=0;
+if signup_flow=23 then signup_flow_23=1;
+else signup_flow_23=0;
+if signup_flow=24 then signup_flow_24=1;
+else signup_flow_24=0;
+if signup_flow=25 then signup_flow_25=1;
+else signup_flow_25=0;
+if signup_flow not in (1,2,3,12,23,24,25) then signup_flow_others=1;
+else signup_flow_others=0;
+
+/*Dummy Variables - Affiliate Channel*/
+if affiliate_channel='api' then affiliate_channel_api=1;
+else affiliate_channel_api=0;
+if affiliate_channel='content' then affiliate_channel_content=1;
+else affiliate_channel_content=0;
+if affiliate_channel='direct' then affiliate_channel_direct=1;
+else affiliate_channel_direct=0;
+if affiliate_channel='other' then affiliate_channel_other=1;
+else affiliate_channel_other=0;
+if affiliate_channel='remarketing' then affiliate_channel_remarketing=1;
+else affiliate_channel_remarketing=0;
+if affiliate_channel='sem-brand' then affiliate_channel_sem_brand=1;
+else affiliate_channel_sem_brand=0;
+if affiliate_channel='sem-non-brand' then affiliate_channel_sem_non_brand=1;
+else affiliate_channel_sem_non_brand=0;
+if affiliate_channel='seo' then affiliate_channel_seo=1;
+else affiliate_channel_seo=0;
+
+/*Dummy Variables - Affiliate Provider*/
+if affiliate_provider='bing' then aff_provider_bing=1;
+else aff_provider_bing=0;
+if affiliate_provider='craigslist' then aff_provider_craigslist=1;
+else aff_provider_craigslist=0;
+if affiliate_provider='direct' then aff_provider_direct=1;
+else aff_provider_direct=0;
+if affiliate_provider='facebook' then aff_provider_facebook=1;
+else aff_provider_facebook=0;
+if affiliate_provider='google' then aff_provider_google=1;
+else aff_provider_google=0;
+if affiliate_provider='other' then aff_provider_other=1;
+else aff_provider_other=0;
+
+/*Dummy Variables - Affiliate Tracked*/
+if first_affiliate_tracked='linked' then first_aff_tra_linked=1;
+else first_aff_tra_linked=0;
+if first_affiliate_tracked='omg' then first_aff_tra_omg=1;
+else first_aff_tra_omg=0;
+if first_affiliate_tracked='product' then first_aff_tra_product=1;
+else first_aff_tra_product=0;
+if first_affiliate_tracked in ('tracked-other','Other') then first_aff_tra_other=1;
+else first_aff_tra_other=0;
+if first_affiliate_tracked='untracked' then first_aff_tra_untracked=1;
+else first_aff_tra_untracked=0;
+
+/*Dummy Variables - SignUp App*/
+if signup_app='Android' then signup_app_android=1;
+else signup_app_android=0;
+if signup_app='Moweb' then signup_app_moweb=1;
+else signup_app_moweb=0;
+if signup_app='Web' then signup_app_web=1;
+else signup_app_web=0;
+if signup_app='iOS' then signup_app_iOS=1;
+else signup_app_iOS=0;
+
+/*Dummy Variables - First Device Type*/
+if first_device_type='Android Phone' then first_device_type_andr_phone=1;
+else first_device_type_andr_phone=0;
+if first_device_type='Android Tablet' then first_device_type_andr_tablet=1;
+else first_device_type_andr_tablet=0;
+if first_device_type='Desktop (Other)' then first_device_type_desk_other=1;
+else first_device_type_desk_other=0;
+if first_device_type='Mac Desktop' then first_device_type_mac_desk=1;
+else first_device_type_mac_desk=0;
+if first_device_type in ('Other/Unknown','SmartPhone (Other)') then first_device_type_other=1;
+else first_device_type_other=0;
+if first_device_type='Windows Desktop' then first_device_type_win_desk=1;
+else first_device_type_win_desk=0;
+if first_device_other='iPad' then first_device_type_iPad=1;
+else first_device_type_iPad=0;
+if first_device_other='iPhone' then first_device_type_iPhone=1;
+else first_device_type_iPhone=0;
+
+/*Dummy Variables - First Browser*/
+if first_browser='Chrome' then first_browser_Chrome=1;
+else first_browser_Chrome=0;
+if first_browser='Firefox' then first_browser_Firefox=1;
+else first_browser_Firefox=0;
+if first_browser='IE' then first_browser_IE=1;
+else first_browser_IE=0;
+if first_browser='Mobile Safari' then first_browser_Mobile_Safari=1;
+else first_browser_Mobile_Safari=0;
+if first_browser='Safari' then first_browser_Safari=1;
+else first_browser_Safari=0;
+if first_browser='Others' then first_browser_Others=1;
+else first_browser_Others=0;
+
+/*Dummy Variables - Language*/
+if language_new='eng' then language_eng=1;
+else language_eng=0;
+if language_new='fra' then language_fra=1;
+else language_fra=0;
+if language_new='ita' then language_ita=1;
+else language_ita=0;
+if language_new='nld' then language_nld=1;
+else language_nld=0;
+if language_new='por' then language_por=1;
+else language_por=0;
+if language_new='spa' then language_spa=1;
+else language_spa=0;
+if language_new='Others' then language_others=1;
+else language_others=0;
+
+/*Dummy Variables - Primary Device*/
+if Primary in ("Android App Unknown Phone/Tablet","Android Phone") then prim_dev_andr=1;
+else prim_dev_andr=0;
+if Primary in ("Mac Desktop") then prim_dev_mac_desk=1;
+else prim_dev_mac_desk=0;
+if Primary in ("Windows Desktop","Windows Phone") then prim_dev_win_desk=1;
+else prim_dev_win_desk=0;
+if Primary in ("iPhone") then prim_dev_iphone=1;
+else prim_dev_iphone=0;
+if Primary in ("iPad Tablet","iPodtouch") then prim_dev_ipad=1;
+else prim_dev_ipad=0;
+if Primary in ("Unknown") then prim_dev_unknown=1;
+else prim_dev_unknown=0;
+if Primary in ("Blackberry","Chromebook","Linux Desktop","Tablet") then prim_dev_others=1;
+else prim_dev_others=0;
+
+/*Dummy Variables - Month Account Created*/
+if month_account_created=1 then month_1=1;
+else month_1=0;
+if month_account_created=2 then month_2=1;
+else month_2=0;
+if month_account_created=3 then month_3=1;
+else month_3=0;
+if month_account_created=4 then month_4=1;
+else month_4=0;
+if month_account_created=5 then month_5=1;
+else month_5=0;
+if month_account_created=6 then month_6=1;
+else month_6=0;
+if month_account_created=7 then month_7=1;
+else month_7=0;
+if month_account_created=8 then month_8=1;
+else month_8=0;
+if month_account_created=9 then month_9=1;
+else month_9=0;
+if month_account_created=10 then month_10=1;
+else month_10=0;
+if month_account_created=11 then month_11=1;
+else month_11=0;
+if month_account_created=12 then month_12=1;
+else month_12=0;
+run;
+
+
+/*Incorporating action_detail into the data */
+data SESSIONS_COUNTRY1;
+set SESSIONS_COUNTRY;
+length action_new $20;
+if action_detail in ("friends_wishlists","airbnb_picks_wishlists","wishlist","wishlist_content_update","wishlist_note","user_wishlists","friends_wishlists","email_wishlist","email_wishlist_button","popular_wishlists") 
+then action_new = "wishlist_action";
+if action_detail in ("apply_coupon","apply_coupon_click","apply_coupon_click_success","apply_coupon_error","coupon_field_focus")
+then action_new = "coupon_action";
+if action_detail in ("book_it", "booking", "complete_booking", "instant_book", "reservations")
+then action_new = "booking_action";
+if action_detail in ("trip_availability","change_trip_characteristics")
+then action_new = "trips_action";
+if action_detail in ("cancellation_policies","cancellation_policy","cancellation_policy_click")
+then action_new = "cancellation_action";
+if action_detail in ("Click reviews","listing_reviews","listing_reviews_page","listing_recommendations")
+then action_new = "reviews_action";
+if action_detail in ("contact_host","change_contact_host_dates","click_about_host","host_guarantee")
+then action_new = "hostrelated_action";
+if action_detail in ("View_search_results","similar_listings")
+then action_new = "viewsearch_action";
+if action_detail in ("edit_profile")
+then action_new = "profile_action";
+if action_detail in ("message_to_host_change","message_to_host_focus")
+then action_new = "messagetohost_action";
+run;
+
+/*Counting the number of action_new occurences individually*/
+proc sql;
+create table action1 as
+select distinct user_id,
+action_new,
+count(distinct action_type) as  count_action
+from SESSIONS_COUNTRY1
+group by 1,2;
+quit;
+
+/*Transpose to respective variables*/
+proc transpose data=action1 out=action2(drop=_name_);
+by user_id;
+id action_new;
+var count_action;
+run;
+
+data action3;
+set action2;
+if trips_action NE " " then trips_action = 1;
+if viewsearch_action NE  " " then viewsearch_action = 1;
+if wishlist_action NE " " then wishlist_action = 1;
+if reviews_action NE " " then reviews_action = 1;
+if booking_action NE " " then booking_action = 1;
+if hostrelated_action NE " " then hostrelated_action = 1;
+if profile_action NE " " then profile_action = 1;
+if cancellation_action NE " " then cancellation_action = 1;
+if coupon_action NE " " then coupon_action = 1;
+if messagetohost_action NE " " then messagetohost_action = 1;
+if trips_action = " " then trips_action = 0;
+if viewsearch_action =  " " then viewsearch_action = 0;
+if wishlist_action = " " then wishlist_action = 0;
+if reviews_action = " " then reviews_action = 0;
+if booking_action = " " then booking_action = 0;
+if hostrelated_action = " " then hostrelated_action = 0;
+if profile_action = " " then profile_action = 0;
+if cancellation_action = " " then cancellation_action = 0;
+if coupon_action = " " then coupon_action = 0;
+if messagetohost_action = " " then messagetohost_action = 0;
+run;
+
+proc sql;
+create table temp11 as
+select a.*, b.*
+from airbnb2_new a left join action3 b
+on a.id=b.user_id;
+quit;
+
+/*Final data set*/
+data airbnb3;
+set temp11(drop=user_id);
+run;
